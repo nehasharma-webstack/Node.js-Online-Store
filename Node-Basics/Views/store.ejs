@@ -1,0 +1,47 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/css/main.css">
+</head> -->
+
+<%- include('./includes/header') %>
+
+<body>
+  <!-- <div class="mainDiv">
+        <nav>
+            <ul>
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/admin/add-product">Add Product</a>
+                </li>
+            </ul>
+        </nav>
+    </div> -->
+
+  <%- include('./includes/navigation') %>
+
+  <h1>Welcome to Online Store!</h1>
+  <br />
+
+  <% if(prod.length > 0){ %> <% for(products of prod){ %>
+
+  <div class="card">
+    <h1><%= products.name %></h1>
+
+    <button><a href="/products/<%= products.id %>">Details</a></button>
+    <button>Add to Cart</button>
+  </div>
+
+  <% } %> <% }else{ %>
+  <h2>No Product Found</h2>
+  <% } %> <%- include('./includes/footer') %>
+</body>
