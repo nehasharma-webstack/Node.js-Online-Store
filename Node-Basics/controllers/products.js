@@ -21,38 +21,65 @@ exports.postAddProduct = (req, res, next) => {
   products
     .save()
     .then((result) => {
-      res.json({
-        status: "Success",
-        message: "Product added successfully",
-        data: result,
+      // res.json({
+      //   status: "Success",
+      //   message: "Product added successfully",
+      //   data: result,
+      // });
+      res.redirect("/");
+    })
+    .catch((err) => {
+      // res.json({
+      //   status: "error",
+      //   message: "Can't add product",
+      // });
+      res.render("404");
+    });
+};
+
+//FEtch all products from DB
+exports.fetchAllProducts = (req, res, next) => {
+  Product.find()
+    .then((result) => {
+      // res.json({
+      //   status: "success",
+      //   message: "Products fetched successfully",
+      //   data: result,
+      // });
+      res.render("store", {
+        prod: result,
+        path: "/",
+        title: "My Store",
       });
-      // res.redirect("/");
+    })
+    .catch((err) => {
+      res.render("404", {
+        title: "Error",
+      });
+    });
+};
+
+//Fetch particular product
+exports.fetchProductById = (req, res, next) => {
+  //code goes here....
+  const prodId = req.params.productId;
+  Product.findById(prodId)
+    .then((result) => {
+      // res.json({
+      //   status: "success",
+      //   message: "Products fetched successfully",
+      //   data: result,
+      // });
+      res.render("product-detail", {
+        title: "Product Details",
+        path: "/",
+        prod: result,
+      });
     })
     .catch((err) => {
       res.json({
         status: "error",
-        message: "Can't add product",
+        message: "Error in fetching products",
       });
     });
-};
-
-exports.fetchAllProducts = (req, res, next) => {
-  Product.find({}).then((products) => {
-    res.render("store", {
-      prod: products,
-      title: "My Store",
-      path: "/",
-    });
-  });
-};
-
-exports.fetchProduct = (req, res, next) => {
-  const prodId = req.params.productId;
-  Product.findById(prodId).then((product) => {
-    res.render("product-detail", {
-      prod: product,
-      title: "Product Details",
-      path: "/products/id",
-    });
-  });
 };
