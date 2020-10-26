@@ -26,14 +26,16 @@ exports.postAddProduct = (req, res, next) => {
       //   message: "Product added successfully",
       //   data: result,
       // });
-      res.redirect("/");
+      res.redirect("/admin");
     })
     .catch((err) => {
       // res.json({
       //   status: "error",
       //   message: "Can't add product",
       // });
-      res.render("404");
+      res.render("404", {
+        title: "Error",
+      });
     });
 };
 
@@ -59,17 +61,15 @@ exports.fetchAllProducts = (req, res, next) => {
     });
 };
 
-//Fetch particular product
 exports.fetchProductById = (req, res, next) => {
-  //code goes here....
   const prodId = req.params.productId;
   Product.findById(prodId)
     .then((result) => {
       // res.json({
       //   status: "success",
-      //   message: "Products fetched successfully",
       //   data: result,
       // });
+
       res.render("product-detail", {
         title: "Product Details",
         path: "/",
@@ -77,9 +77,44 @@ exports.fetchProductById = (req, res, next) => {
       });
     })
     .catch((err) => {
-      res.json({
-        status: "error",
-        message: "Error in fetching products",
+      // res.json({
+      //   status: "error",
+      //   message: "Could not find the product",
+      // });
+      res.render("404", {
+        title: "Error",
       });
     });
+};
+
+exports.updateProduct = (req, res, next) => {
+  const name = req.body.name;
+  const price = req.body.price;
+  const brand = req.body.brand;
+  const rating = req.body.rating;
+  const id = req.params.productId;
+  Product.update(
+    { _id: id },
+    {
+      $set: {
+        name: name,
+        price: price,
+        brand: brand,
+        rating: rating,
+      },
+    }
+  ).then((result) => {
+    res
+      .json({
+        status: "success",
+        message: "Product updated successfully",
+        data: result,
+      })
+      .catch((err) => {
+        res.json({
+          status: "error",
+          message: "Error in updating the product",
+        });
+      });
+  });
 };

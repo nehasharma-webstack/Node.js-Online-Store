@@ -1,11 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const adminRoutes = require("./Routes/admin");
-const storeRoutes = require("./Routes/store");
+const productRoutes = require("./Routes/products");
 
 const path = require("path");
-const { urlencoded } = require("body-parser");
 
 const app = express(); //initialized express app object
 
@@ -14,8 +12,7 @@ app.set("views", "Views");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use("/admin", adminRoutes); // filtering
-app.use(storeRoutes);
+app.use("/admin", productRoutes);
 
 app.use(express.static(path.join(__dirname, "public")));
 
