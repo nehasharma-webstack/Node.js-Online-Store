@@ -12,6 +12,9 @@
     <p><%= prod.brand %></p>
     <p><%= prod.rating %></p>
     <button>Add to Cart</button>
+    <form action="/admin/products/<%= prod.id %>" method="DELETE">
+      <button type="submit">Delete</button>
+    </form>
   </div>
 
   <%- include('./includes/footer') %>

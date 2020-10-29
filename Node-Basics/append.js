@@ -8,10 +8,10 @@
 // console.log(multiply([1, 2, 3]));
 
 // Example Node.js program to append data to file
-var fs = require("fs");
+var fs = require('fs');
 
 var data = "\nLearn Node.js with the help of well built Node.js Tutorial.";
 
 // append data to file
-fs.appendFileSync("test.txt", data, "utf8");
-console.log("Data is appended to file successfully.");
+fs.appendFileSync('test.txt', data, 'utf8');
+console.log("Data is appended to file successfully.")

@@ -1,4 +1,5 @@
 const Product = require("../models/products");
+const { validationResult } = require("express-validator");
 
 exports.addProductForm = (req, res, next) => {
   res.render("add-product", {
@@ -7,17 +8,28 @@ exports.addProductForm = (req, res, next) => {
   });
 };
 
-exports.postAddProduct = (req, res, next) => {
+exports.addProduct = (req, res, next) => {
   const name = req.body.name;
   const price = req.body.price;
   const brand = req.body.brand;
   const rating = req.body.rating;
+
   const products = new Product({
-    name: name,
-    price: price,
-    brand: brand,
-    rating: rating,
+    name,
+    price,
+    brand,
+    rating,
   });
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.render("add-product", {
+      title: "Add Product",
+      path: "/admin/add-product",
+      error_message: errors.array(),
+    });
+  }
   products
     .save()
     .then((result) => {
@@ -26,95 +38,50 @@ exports.postAddProduct = (req, res, next) => {
       //   message: "Product added successfully",
       //   data: result,
       // });
-      res.redirect("/admin");
+      res.redirect("/");
     })
     .catch((err) => {
-      // res.json({
-      //   status: "error",
-      //   message: "Can't add product",
-      // });
-      res.render("404", {
-        title: "Error",
+      res.json({
+        err: err,
+        status: "error",
       });
     });
 };
 
-//FEtch all products from DB
 exports.fetchAllProducts = (req, res, next) => {
-  Product.find()
-    .then((result) => {
-      // res.json({
-      //   status: "success",
-      //   message: "Products fetched successfully",
-      //   data: result,
-      // });
-      res.render("store", {
-        prod: result,
-        path: "/",
-        title: "My Store",
-      });
-    })
-    .catch((err) => {
-      res.render("404", {
-        title: "Error",
-      });
+  Product.find({}).then((products) => {
+    res.render("store", {
+      prod: products,
+      title: "My Store",
+      path: "/",
     });
+  });
 };
 
 exports.fetchProductById = (req, res, next) => {
   const prodId = req.params.productId;
-  Product.findById(prodId)
-    .then((result) => {
-      // res.json({
-      //   status: "success",
-      //   data: result,
-      // });
-
-      res.render("product-detail", {
-        title: "Product Details",
-        path: "/",
-        prod: result,
-      });
-    })
-    .catch((err) => {
-      // res.json({
-      //   status: "error",
-      //   message: "Could not find the product",
-      // });
-      res.render("404", {
-        title: "Error",
-      });
+  Product.findById(prodId).then((product) => {
+    res.render("product-detail", {
+      prod: product,
+      title: "Product Details",
+      path: "/products/id",
     });
+  });
 };
 
-exports.updateProduct = (req, res, next) => {
-  const name = req.body.name;
-  const price = req.body.price;
-  const brand = req.body.brand;
-  const rating = req.body.rating;
-  const id = req.params.productId;
-  Product.update(
-    { _id: id },
-    {
-      $set: {
-        name: name,
-        price: price,
-        brand: brand,
-        rating: rating,
-      },
-    }
-  ).then((result) => {
-    res
-      .json({
-        status: "success",
-        message: "Product updated successfully",
-        data: result,
-      })
-      .catch((err) => {
-        res.json({
-          status: "error",
-          message: "Error in updating the product",
-        });
+exports.deleteProduct = (req, res, next) => {
+  const prodId = req.params.productId;
+
+  Product.remove({ _id: prodId })
+    .then((result) => {
+      console.log(result);
+      //res.json({ res: result });
+      res.redirect("/");
+    })
+    .catch((err) => {
+      res.render("404", {
+        title: "Error",
+        path: "/",
       });
-  });
+    });
 };

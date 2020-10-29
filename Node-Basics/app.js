@@ -1,7 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const productRoutes = require("./Routes/products");
+const adminRoutes = require("./Routes/admin");
+const storeRoutes = require("./Routes/store");
 
 const path = require("path");
 
@@ -12,7 +13,8 @@ app.set("views", "Views");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use("/admin", productRoutes);
+app.use("/admin", adminRoutes); // filtering
+app.use(storeRoutes);
 
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -31,7 +33,9 @@ mongoose
     useUnifiedTopology: true,
   })
   .then((result) => {
-    console.log("Database connected successfully...");
     app.listen(5000);
+    console.log("Database connected successfully");
   })
-  .catch((err) => console.log("Error in connecting DB"));
+  .catch((err) => {
+    console.log("cant connect to Database", err);
+  });
