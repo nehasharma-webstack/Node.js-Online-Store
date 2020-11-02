@@ -5,6 +5,7 @@ exports.addProductForm = (req, res, next) => {
   res.render("add-product", {
     title: "Add Product",
     path: "/admin/add-product",
+    error_message: "",
   });
 };
 
@@ -20,6 +21,7 @@ exports.addProduct = (req, res, next) => {
     brand,
     rating,
   });
+  //Validation error handling
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -30,6 +32,7 @@ exports.addProduct = (req, res, next) => {
       error_message: errors.array(),
     });
   }
+
   products
     .save()
     .then((result) => {

@@ -30,11 +30,16 @@
   <%- include('./includes/navigation') %>
 
   <div class="formDiv">
+    <% if(error_message){ for(error of error_message){ %>
+    <div class="error"><%= error.msg %></div>
+
+    <% } } %>
+    <br />
     <h1>Add Product</h1>
     <form action="/admin/add-product" method="POST">
       Product Name
       <input type="text" name="name" />
-      <br />
+
       Price
       <input type="number" name="price" />
       <br />
