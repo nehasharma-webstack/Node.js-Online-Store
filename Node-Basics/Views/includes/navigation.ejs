@@ -1,12 +1,29 @@
 <div class="mainDiv">
-    <nav>
-        <ul>
-            <li>
-                <a href="/" class="<%- path==='/' ? 'active' : '' %>">Home</a>
-            </li>
-            <li>
-                <a href="/admin/add-product" class="<%- path==='/' ? 'active' : '' %>">Add Product</a>
-            </li>
-        </ul>
-    </nav>
+  <nav>
+    <ul>
+      <li>
+        <a href="/" class="<%- path==='/' ? 'active' : '' %>">Home</a>
+      </li>
+      <% if (isAuthenticated){ %>
+      <li>
+        <a href="/admin/add-product" class="<%- path==='/' ? 'active' : '' %>"
+          >Add Product</a
+        >
+      </li>
+      <li>
+        <a href="/auth/logout" class="<%- path==='/logout' ? 'active' : '' %>"
+          >Logout</a
+        >
+      </li>
+
+      <% }else{ %>
+
+      <li>
+        <a href="/auth/login" class="<%- path==='/login' ? 'active' : '' %>"
+          >Login</a
+        >
+      </li>
+      <% } %>
+    </ul>
+  </nav>
 </div>

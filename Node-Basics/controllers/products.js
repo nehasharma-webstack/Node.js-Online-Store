@@ -6,6 +6,7 @@ exports.addProductForm = (req, res, next) => {
     title: "Add Product",
     path: "/admin/add-product",
     error_message: "",
+    isAuthenticated: req.session.isLoggedIn,
   });
 };
 
@@ -57,6 +58,7 @@ exports.fetchAllProducts = (req, res, next) => {
       prod: products,
       title: "My Store",
       path: "/",
+      isAuthenticated: req.session.isLoggedIn,
     });
   });
 };
@@ -68,6 +70,7 @@ exports.fetchProductById = (req, res, next) => {
       prod: product,
       title: "Product Details",
       path: "/products/id",
+      isAuthenticated: req.session.isLoggedIn,
     });
   });
 };

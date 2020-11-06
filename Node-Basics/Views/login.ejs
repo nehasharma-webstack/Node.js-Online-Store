@@ -1,0 +1,19 @@
+<%- include('./includes/header') %>
+
+<body>
+  <%- include('./includes/navigation') %>
+
+  <div class="formDiv">
+    <h1>Login Here</h1>
+    <form action="/auth/login" method="POST">
+      Email
+      <input type="email" name="email" />
+
+      Password
+      <input type="password" name="password" />
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+  <%- include('./includes/footer') %>
+</body>

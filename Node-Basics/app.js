@@ -1,9 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const session = require("express-session");
 const mongoose = require("mongoose");
 const adminRoutes = require("./Routes/admin");
 const storeRoutes = require("./Routes/store");
-
+const authRoutes = require("./Routes/auth");
 const path = require("path");
 
 const app = express(); //initialized express app object
@@ -12,11 +13,20 @@ app.set("view engine", "ejs");
 app.set("views", "Views");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "public")));
+
+//Creating sessions
+app.use(
+  session({
+    secret: "my first secret",
+    saveUninitialized: false,
+    resave: false,
+  })
+);
 
 app.use("/admin", adminRoutes); // filtering
 app.use(storeRoutes);
-
-app.use(express.static(path.join(__dirname, "public")));
+app.use("/auth", authRoutes);
 
 app.use((req, res, next) => {
   // res.statusCode = 404;
@@ -24,6 +34,8 @@ app.use((req, res, next) => {
   // res.status(404).send(`<h1>Page Not Found!</h1>`);
   res.render("404", {
     title: "Page Not Found",
+    path: "/error",
+    isAuthenticated: req.isLoggedIn,
   });
 });
 
